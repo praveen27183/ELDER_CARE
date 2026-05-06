@@ -1,0 +1,56 @@
+import { BookingManager } from './Bookings';
+import { useLanguage } from "../../context/LanguageContext";
+import { ChevronLeft, Home } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+export default function HouseHelpPage() {
+  const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleBookHouseHelp = () => {
+    const booking = BookingManager.createBooking(
+      t.help || "House Help Service",
+      "home",
+      {
+        notes: "General house help requested",
+        estimatedDuration: "2 hours",
+        cost: 200
+      }
+    );
+    
+    alert(`${t.help} booked successfully! ID: ${booking.id}`);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-6">
+      <div className="max-w-md mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <button 
+            onClick={() => navigate(-1)}
+            className="p-3 bg-white rounded-2xl shadow-sm hover:bg-slate-50 transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6 text-slate-600" />
+          </button>
+          <h1 className="text-3xl font-black text-slate-800">
+            {t.help}
+          </h1>
+        </div>
+        
+        <div className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/60 border border-slate-100 text-center">
+          <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Home className="w-10 h-10 text-indigo-600" />
+          </div>
+          <p className="text-slate-500 mb-8 font-medium">
+            Assistance with household chores, cleaning, and light maintenance by our caring volunteers.
+          </p>
+          <button
+            onClick={handleBookHouseHelp}
+            className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white text-xl font-bold rounded-2xl shadow-lg shadow-indigo-200 transition-all active:scale-[0.98]"
+          >
+            {t.bookService}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
