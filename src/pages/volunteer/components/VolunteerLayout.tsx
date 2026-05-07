@@ -172,10 +172,24 @@ export default function VolunteerLayout() {
                         <h2 className="text-lg font-semibold text-slate-700">Volunteer Dashboard</h2>
                     </div>
                     <div className="flex items-center gap-4">
+                        {/* Duty Toggle */}
+                        <button
+                            onClick={() => setIsOnDuty(!isOnDuty)}
+                            className={`flex items-center gap-2.5 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${
+                                isOnDuty 
+                                    ? 'bg-emerald-500 text-white border-b-4 border-emerald-700 shadow-lg shadow-emerald-100 hover:bg-emerald-600 hover:-translate-y-0.5' 
+                                    : 'bg-slate-200 text-slate-500 border-b-4 border-slate-300 hover:bg-slate-300'
+                            }`}
+                            title={isOnDuty ? "Go Off Duty" : "Go On Duty"}
+                        >
+                            <Power className={`w-4 h-4 ${isOnDuty ? 'text-white' : 'text-slate-400'}`} />
+                            <span className="hidden sm:inline">{isOnDuty ? 'On Duty' : 'Off Duty'}</span>
+                        </button>
+
                         {/* Profile Avatar */}
                         <button
                             onClick={() => navigate('/volunteer/profile')}
-                            className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold hover:bg-amber-600 transition-colors"
+                            className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white font-bold hover:bg-amber-600 transition-all shadow-md hover:scale-105"
                             title="Go to Profile"
                         >
                             {getInitials(volunteerName)}
