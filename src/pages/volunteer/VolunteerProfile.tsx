@@ -15,8 +15,12 @@ import {
     CheckCircle2,
     Calendar,
     ChevronRight,
-    Camera
+    Camera,
+    X,
+    UserCircle,
+    Globe
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
 import DutyProtection from './components/DutyProtection';
 import profileImg from './profile.png';
@@ -147,30 +151,43 @@ export default function VolunteerProfile() {
         }));
     };
 
+    const handleCancel = () => {
+        setIsEditing(false);
+    };
+
     const handleSave = async () => {
         try {
+            // 1. Update Core Auth Profile
+            const authPayload = {
+                firstName: editFormData.name.split(' ')[0] || '',
+                lastName: editFormData.name.split(' ').slice(1).join(' ') || '',
+                phone: editFormData.phone
+            };
+            
+            await api.put('/auth/profile', authPayload);
+
+            // 2. Update Volunteer Document if it exists
             if (volunteerId) {
-                // Update volunteer record directly
-                const { data } = await api.patch(`/volunteers/${volunteerId}`, editFormData);
-                
-                // Sync with profile data immediately
-                setProfileData(prev => ({
-                    ...prev,
-                    name: editFormData.name,
-                    email: editFormData.email,
-                    phone: editFormData.phone,
-                    location: editFormData.location
-                }));
-                
-                setIsEditing(false);
-                setShowSuccessMessage(true);
-                setTimeout(() => setShowSuccessMessage(false), 5000);
-                
-                // Refresh data to ensure consistency
-                const userRes = await api.get('/auth/me');
-                if (userRes.data.user) {
-                    localStorage.setItem('user', JSON.stringify(userRes.data.user));
-                }
+                await api.patch(`/volunteers/${volunteerId}`, editFormData);
+            }
+            
+            // 3. Sync with local state immediately
+            setProfileData(prev => ({
+                ...prev,
+                name: editFormData.name,
+                email: editFormData.email,
+                phone: editFormData.phone,
+                location: editFormData.location
+            }));
+            
+            setIsEditing(false);
+            setShowSuccessMessage(true);
+            setTimeout(() => setShowSuccessMessage(false), 5000);
+            
+            // 4. Refresh local user data
+            const userRes = await api.get('/auth/me');
+            if (userRes.data.user) {
+                localStorage.setItem('user', JSON.stringify(userRes.data.user));
             }
         } catch (error) {
             console.error('Error updating profile:', error);
@@ -271,106 +288,44 @@ export default function VolunteerProfile() {
                             </div>
                         </div>
 
-                        {isEditing ? (
-                            <div className="bg-slate-50 rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 space-y-4 md:space-y-6 border border-slate-100 animate-in slide-in-from-bottom-4 duration-500">
-                                <h3 className="text-lg md:text-xl font-black text-slate-800 mb-2">Update Personal Information</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                                    <div className="space-y-1 md:space-y-2">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
-                                        <input
-                                            type="text"
-                                            value={editFormData.name}
-                                            onChange={(e) => handleInputChange('name', e.target.value)}
-                                            className="w-full px-4 md:px-5 py-3 md:py-4 bg-white border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
-                                            placeholder="Your full name"
-                                        />
-                                    </div>
-                                    <div className="space-y-1 md:space-y-2">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
-                                        <input
-                                            type="email"
-                                            value={editFormData.email}
-                                            onChange={(e) => handleInputChange('email', e.target.value)}
-                                            className="w-full px-4 md:px-5 py-3 md:py-4 bg-white border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
-                                            placeholder="email@example.com"
-                                        />
-                                    </div>
-                                    <div className="space-y-1 md:space-y-2">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
-                                        <input
-                                            type="tel"
-                                            value={editFormData.phone}
-                                            onChange={(e) => handleInputChange('phone', e.target.value)}
-                                            className="w-full px-4 md:px-5 py-3 md:py-4 bg-white border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
-                                            placeholder="+91 XXXXX XXXXX"
-                                        />
-                                    </div>
-                                    <div className="space-y-1 md:space-y-2">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Work Location</label>
-                                        <input
-                                            type="text"
-                                            value={editFormData.location}
-                                            onChange={(e) => handleInputChange('location', e.target.value)}
-                                            className="w-full px-4 md:px-5 py-3 md:py-4 bg-white border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
-                                            placeholder="City, Region"
-                                        />
-                                    </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-50 border border-slate-100">
+                                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                                    <Mail className="w-5 h-5 text-blue-600" />
                                 </div>
-                                <div className="flex flex-col md:flex-row gap-3 md:gap-4 pt-4 border-t border-slate-200">
-                                    <button
-                                        onClick={handleSave}
-                                        className="flex-1 bg-slate-900 text-white py-4 md:py-5 rounded-xl md:rounded-2xl font-black text-base md:text-lg shadow-xl shadow-slate-200 hover:bg-black active:scale-[0.98] transition-all order-1 md:order-1"
-                                    >
-                                        Save Changes
-                                    </button>
-                                    <button
-                                        onClick={() => setIsEditing(false)}
-                                        className="w-full md:w-auto px-6 md:px-10 bg-slate-100 text-slate-500 py-4 md:py-5 rounded-xl md:rounded-2xl font-black text-base md:text-lg hover:bg-slate-200 active:scale-[0.98] transition-all order-2 md:order-2"
-                                    >
-                                        Cancel
-                                    </button>
+                                <div className="overflow-hidden">
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Email</p>
+                                    <p className="text-sm font-bold text-slate-700 truncate">{profileData.email}</p>
                                 </div>
                             </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-50 border border-slate-100">
-                                    <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                                        <Mail className="w-5 h-5 text-blue-600" />
-                                    </div>
-                                    <div className="overflow-hidden">
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Email</p>
-                                        <p className="text-sm font-bold text-slate-700 truncate">{profileData.email}</p>
-                                    </div>
+                            <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-50 border border-slate-100">
+                                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                                    <Phone className="w-5 h-5 text-emerald-600" />
                                 </div>
-                                <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-50 border border-slate-100">
-                                    <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                                        <Phone className="w-5 h-5 text-emerald-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Phone</p>
-                                        <p className="text-sm font-bold text-slate-700">{profileData.phone}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-50 border border-slate-100">
-                                    <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                                        <Calendar className="w-5 h-5 text-purple-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Joined</p>
-                                        <p className="text-sm font-bold text-slate-700">{profileData.joinDate}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-50 border border-slate-100">
-                                    <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                                        <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Rating</p>
-                                        <p className="text-sm font-bold text-slate-700">{profileData.rating}</p>
-                                    </div>
+                                <div>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Phone</p>
+                                    <p className="text-sm font-bold text-slate-700">{profileData.phone}</p>
                                 </div>
                             </div>
-                        )}
+                            <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-50 border border-slate-100">
+                                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                                    <Calendar className="w-5 h-5 text-purple-600" />
+                                </div>
+                                <div>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Joined</p>
+                                    <p className="text-sm font-bold text-slate-700">{profileData.joinDate}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-50 border border-slate-100">
+                                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                                    <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                                </div>
+                                <div>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Rating</p>
+                                    <p className="text-sm font-bold text-slate-700">{profileData.rating}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -465,6 +420,103 @@ export default function VolunteerProfile() {
                     </div>
                 </div>
             </div>
+
+            {/* EDIT PROFILE MODAL */}
+            <AnimatePresence>
+                {isEditing && (
+                    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-[100] p-4 overflow-y-auto">
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="bg-white p-6 md:p-8 rounded-3xl w-full max-w-md relative shadow-2xl my-auto mb-24 md:mb-auto"
+                        >
+                            <button
+                                onClick={handleCancel}
+                                className="absolute top-6 right-6 p-2 hover:bg-slate-100 rounded-full transition-colors"
+                            >
+                                <X className="w-6 h-6 text-slate-400" />
+                            </button>
+
+                            <h2 className="text-2xl font-black text-slate-800 mb-6">Edit Profile</h2>
+
+                            <div className="space-y-5 mb-8">
+                                {/* NAME */}
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Full Name</label>
+                                    <div className="relative">
+                                        <UserCircle className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                        <input
+                                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:outline-none transition-all font-semibold"
+                                            placeholder="Enter full name"
+                                            value={editFormData.name}
+                                            onChange={(e) => handleInputChange('name', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* EMAIL */}
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                        <input
+                                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:outline-none transition-all font-semibold"
+                                            placeholder="Enter email"
+                                            value={editFormData.email}
+                                            onChange={(e) => handleInputChange('email', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* PHONE */}
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Phone Number</label>
+                                    <div className="relative">
+                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                        <input
+                                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:outline-none transition-all font-semibold"
+                                            placeholder="Enter phone number"
+                                            value={editFormData.phone}
+                                            onChange={(e) => handleInputChange('phone', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* LOCATION */}
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Work Location</label>
+                                    <div className="relative">
+                                        <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                                        <input
+                                            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:outline-none transition-all font-semibold"
+                                            placeholder="e.g. Chennai, India"
+                                            value={editFormData.location}
+                                            onChange={(e) => handleInputChange('location', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={handleCancel}
+                                    className="flex-1 bg-slate-100 text-slate-500 py-4 rounded-2xl font-bold hover:bg-slate-200 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    onClick={handleSave}
+                                    className="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all"
+                                >
+                                    Save Changes
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </DutyProtection>
     );
 }
