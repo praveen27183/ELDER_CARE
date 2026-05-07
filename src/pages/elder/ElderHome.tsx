@@ -50,23 +50,14 @@ export default function ElderHome() {
     const [showTerms, setShowTerms] = useState(false);
     const [showItems, setShowItems] = useState(false);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    const [volunteer, setVolunteer] = useState<any | null>({ 
-        name: 'Sarah Wilson', 
-        eta: 5,
-        rating: 4.9,
-        reviews: 128,
-        verified: true,
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
-        specialty: "Medical Support",
-        phone: "+91 98765 43210"
-    });
+    const [volunteer, setVolunteer] = useState<any | null>(null);
     const [elderLocation, setElderLocation] = useState(DEFAULT_LOCATION);
-    const [showMap, setShowMap] = useState(true);
+    const [showMap, setShowMap] = useState(false);
     const [user, setUser] = useState<any>(null);
-    const [activeItems, setActiveItems] = useState<string[]>(['Blood Pressure Meds', 'Pain Relief', 'Daily Vitamins']);
-    const [activeService, setActiveService] = useState<string | null>('Medicines');
+    const [activeItems, setActiveItems] = useState<string[]>([]);
+    const [activeService, setActiveService] = useState<string | null>(null);
     const [isSearching, setIsSearching] = useState(false);
-    const [showTracking, setShowTracking] = useState(true);
+    const [showTracking, setShowTracking] = useState(false);
     const [mockVolunteers, setMockVolunteers] = useState<any[]>([]);
     const [showNotifications, setShowNotifications] = useState(false);
     const [showArrivalToast, setShowArrivalToast] = useState(false);
