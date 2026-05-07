@@ -94,7 +94,7 @@ export default function Membership() {
     <div className="min-h-screen bg-slate-50 pb-20 font-sans">
       
       {/* HEADER */}
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-4 flex items-center gap-4">
+      <div className="sticky top-0 z-30 bg-white border-b border-slate-100 px-4 pt-6 pb-4 flex items-center gap-4">
         <motion.button 
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)} 
@@ -102,7 +102,7 @@ export default function Membership() {
         >
           <ArrowLeft className="w-6 h-6 text-slate-600" />
         </motion.button>
-        <h1 className="text-xl font-bold text-slate-800">{t.membership}</h1>
+        <h1 className="text-2xl font-black text-slate-800">{t.membership}</h1>
       </div>
 
       <div className="max-w-md mx-auto p-4">
@@ -230,12 +230,12 @@ export default function Membership() {
       {/* SUCCESS MODAL */}
       <AnimatePresence>
         {showSuccess && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-[2.5rem] w-full max-w-sm p-8 text-center shadow-2xl relative overflow-hidden"
+              className="bg-white rounded-[2.5rem] w-full max-w-sm p-8 text-center shadow-2xl relative overflow-hidden mb-24 md:mb-auto"
             >
               <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 to-orange-500" />
               

@@ -34,14 +34,14 @@ export default function MedicinesPage() {
     <div className="min-h-screen bg-slate-50 p-6">
       {!showConfirmation ? (
         <div className="max-w-md mx-auto">
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-4 mb-6 md:mb-8">
             <button 
               onClick={() => navigate(-1)}
-              className="p-3 bg-white rounded-2xl shadow-sm hover:bg-slate-50 transition-colors"
+              className="p-2 md:p-3 bg-white rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-50 transition-colors"
             >
               <ChevronLeft className="w-6 h-6 text-slate-600" />
             </button>
-            <h1 className="text-3xl font-black text-slate-800">
+            <h1 className="text-2xl md:text-3xl font-black text-slate-800">
               {t.medicine}
             </h1>
           </div>
@@ -62,11 +62,11 @@ export default function MedicinesPage() {
           </div>
         </div>
       ) : (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 z-50">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 z-[100]">
           <motion.div 
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white w-full max-w-sm rounded-[2.5rem] p-8 text-center shadow-2xl border border-slate-100"
+            className="bg-white w-full max-w-sm rounded-[2.5rem] p-8 text-center shadow-2xl border border-slate-100 mb-24 md:mb-auto"
           >
             <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Sparkles className="w-10 h-10 text-emerald-600" />

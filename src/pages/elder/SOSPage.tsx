@@ -78,7 +78,7 @@ export default function SOSPage() {
     <div className="min-h-screen bg-slate-50 font-sans overflow-hidden">
       
       {/* HEADER */}
-      <div className="p-4 flex items-center gap-4">
+      <div className="sticky top-0 z-30 bg-white border-b border-slate-100 px-4 pt-6 pb-4 flex items-center gap-4">
         <motion.button 
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)}
@@ -86,7 +86,7 @@ export default function SOSPage() {
         >
           <ChevronLeft className="w-6 h-6 text-slate-600" />
         </motion.button>
-        <h1 className="text-xl font-black text-slate-800">{t.sos}</h1>
+        <h1 className="text-2xl font-black text-slate-800">{t.sos}</h1>
       </div>
 
       <div className="max-w-md mx-auto p-6 flex flex-col items-center justify-center min-h-[80vh] text-center">

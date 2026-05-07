@@ -150,21 +150,37 @@ export default function VolunteerProfile() {
     const handleSave = async () => {
         try {
             if (volunteerId) {
-                await api.patch(`/volunteers/${volunteerId}/update-request`, editFormData);
-                setPendingChanges(editFormData);
+                // Update volunteer record directly
+                const { data } = await api.patch(`/volunteers/${volunteerId}`, editFormData);
+                
+                // Sync with profile data immediately
+                setProfileData(prev => ({
+                    ...prev,
+                    name: editFormData.name,
+                    email: editFormData.email,
+                    phone: editFormData.phone,
+                    location: editFormData.location
+                }));
+                
                 setIsEditing(false);
                 setShowSuccessMessage(true);
                 setTimeout(() => setShowSuccessMessage(false), 5000);
+                
+                // Refresh data to ensure consistency
+                const userRes = await api.get('/auth/me');
+                if (userRes.data.user) {
+                    localStorage.setItem('user', JSON.stringify(userRes.data.user));
+                }
             }
         } catch (error) {
-            console.error('Error submitting update request:', error);
-            alert('Failed to submit update request. Please try again.');
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile. Please try again.');
         }
     };
 
     return (
         <DutyProtection>
-            <div className="max-w-4xl mx-auto space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="max-w-4xl mx-auto space-y-6 md:space-y-8 p-4 md:px-0 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 
                 {/* Status Messages */}
                 <div className="space-y-3">
@@ -198,12 +214,12 @@ export default function VolunteerProfile() {
 
                 {/* Profile Hero Section */}
                 <div className="relative bg-white rounded-[3rem] shadow-2xl shadow-slate-200 overflow-hidden border border-slate-100">
-                    <div className="h-40 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative">
+                    <div className="h-32 md:h-40 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative">
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                         {!isEditing && (
                             <button 
                                 onClick={handleEditClick}
-                                className="absolute top-6 right-6 px-6 py-3 bg-white/20 backdrop-blur-xl text-white rounded-2xl font-black flex items-center gap-2 hover:bg-white/30 transition-all active:scale-95 border border-white/30"
+                                className="absolute top-4 right-4 md:top-6 md:right-6 px-4 md:px-6 py-2 md:py-3 bg-white/20 backdrop-blur-xl text-white rounded-xl md:rounded-2xl font-black flex items-center gap-2 hover:bg-white/30 transition-all active:scale-95 border border-white/30 text-xs md:text-base"
                             >
                                 <Edit className="w-4 h-4" />
                                 Edit Profile
@@ -256,60 +272,60 @@ export default function VolunteerProfile() {
                         </div>
 
                         {isEditing ? (
-                            <div className="bg-slate-50 rounded-[2rem] p-8 space-y-6 border border-slate-100 animate-in slide-in-from-bottom-4 duration-500">
-                                <h3 className="text-xl font-black text-slate-800 mb-2">Update Personal Information</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
+                            <div className="bg-slate-50 rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 space-y-4 md:space-y-6 border border-slate-100 animate-in slide-in-from-bottom-4 duration-500">
+                                <h3 className="text-lg md:text-xl font-black text-slate-800 mb-2">Update Personal Information</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                    <div className="space-y-1 md:space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
                                         <input
                                             type="text"
                                             value={editFormData.name}
                                             onChange={(e) => handleInputChange('name', e.target.value)}
-                                            className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+                                            className="w-full px-4 md:px-5 py-3 md:py-4 bg-white border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
                                             placeholder="Your full name"
                                         />
                                     </div>
-                                    <div className="space-y-2">
+                                    <div className="space-y-1 md:space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
                                         <input
                                             type="email"
                                             value={editFormData.email}
                                             onChange={(e) => handleInputChange('email', e.target.value)}
-                                            className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+                                            className="w-full px-4 md:px-5 py-3 md:py-4 bg-white border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
                                             placeholder="email@example.com"
                                         />
                                     </div>
-                                    <div className="space-y-2">
+                                    <div className="space-y-1 md:space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
                                         <input
                                             type="tel"
                                             value={editFormData.phone}
                                             onChange={(e) => handleInputChange('phone', e.target.value)}
-                                            className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+                                            className="w-full px-4 md:px-5 py-3 md:py-4 bg-white border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
                                             placeholder="+91 XXXXX XXXXX"
                                         />
                                     </div>
-                                    <div className="space-y-2">
+                                    <div className="space-y-1 md:space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Work Location</label>
                                         <input
                                             type="text"
                                             value={editFormData.location}
                                             onChange={(e) => handleInputChange('location', e.target.value)}
-                                            className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+                                            className="w-full px-4 md:px-5 py-3 md:py-4 bg-white border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
                                             placeholder="City, Region"
                                         />
                                     </div>
                                 </div>
-                                <div className="flex gap-4 pt-4 border-t border-slate-200">
+                                <div className="flex flex-col md:flex-row gap-3 md:gap-4 pt-4 border-t border-slate-200">
                                     <button
                                         onClick={handleSave}
-                                        className="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black text-lg shadow-xl shadow-slate-200 hover:bg-black active:scale-[0.98] transition-all"
+                                        className="flex-1 bg-slate-900 text-white py-4 md:py-5 rounded-xl md:rounded-2xl font-black text-base md:text-lg shadow-xl shadow-slate-200 hover:bg-black active:scale-[0.98] transition-all order-1 md:order-1"
                                     >
                                         Save Changes
                                     </button>
                                     <button
                                         onClick={() => setIsEditing(false)}
-                                        className="px-10 bg-slate-100 text-slate-500 py-5 rounded-2xl font-black text-lg hover:bg-slate-200 active:scale-[0.98] transition-all"
+                                        className="w-full md:w-auto px-6 md:px-10 bg-slate-100 text-slate-500 py-4 md:py-5 rounded-xl md:rounded-2xl font-black text-base md:text-lg hover:bg-slate-200 active:scale-[0.98] transition-all order-2 md:order-2"
                                     >
                                         Cancel
                                     </button>

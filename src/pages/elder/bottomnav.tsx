@@ -22,7 +22,7 @@ export default function BottomNavbar() {
       {/* NAV BAR */}
       <div className="max-w-lg mx-auto bg-white border border-gray-200 shadow-2xl rounded-3xl px-2 py-3 flex justify-between items-center relative pointer-events-auto">
         {/* LEFT SIDE */}
-        <div className="flex flex-1 justify-around pr-10">
+        <div className="flex flex-1 justify-around pr-6 md:pr-10">
           {navItems.slice(0, 2).map((item, i) => (
             <button
               key={i}
@@ -52,7 +52,7 @@ export default function BottomNavbar() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => navigate("/elder/sos")}
-              className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.5)] border-4 border-white relative overflow-hidden group"
+              className="w-16 h-16 md:w-20 md:h-20 bg-red-600 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.5)] border-4 border-white relative overflow-hidden group"
             >
               {/* Internal Shine Effect */}
               <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
@@ -62,7 +62,7 @@ export default function BottomNavbar() {
                 animate={{ rotate: [0, -10, 10, -10, 0] }}
                 transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 3 }}
               >
-                <AlertTriangle className="text-white w-19 h-19 drop-shadow-md" />
+                <AlertTriangle className="text-white w-8 h-8 md:w-10 md:h-10 drop-shadow-md" />
               </motion.div>
               
               
@@ -71,7 +71,7 @@ export default function BottomNavbar() {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex flex-1 justify-around pl-10">
+        <div className="flex flex-1 justify-around pl-6 md:pl-10">
           {navItems.slice(2).map((item, i) => (
             <button
               key={i}

@@ -185,7 +185,7 @@ export default function Bookings() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24 font-sans">
+    <div className="min-h-screen bg-slate-50 pb-24 font-sans overflow-x-hidden">
       
       {/* HEADER */}
       <div className="bg-white border-b border-slate-100 sticky top-0 z-30 px-4 pt-6 pb-4">
@@ -388,12 +388,12 @@ export default function Bookings() {
       {/* TRACKING MODAL */}
       <AnimatePresence>
         {trackingBooking && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-[2.5rem] w-full max-w-lg p-6 shadow-2xl relative overflow-hidden h-[80vh] flex flex-col"
+              className="bg-white rounded-[2.5rem] w-full max-w-lg p-6 shadow-2xl relative overflow-hidden h-[80vh] flex flex-col mb-24 md:mb-auto"
             >
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-black text-slate-800">{t.track}</h2>

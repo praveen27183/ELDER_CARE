@@ -510,7 +510,6 @@ export default function ElderHome() {
                     <div className={`${showMap ? 'lg:col-span-2' : 'max-w-5xl mx-auto w-full'}`}>
                         <ServiceGrid 
                             onServiceClick={(service) => {
-                                setShowMap(true);
                                 setSelectedService(service.name);
                             }}
                         />

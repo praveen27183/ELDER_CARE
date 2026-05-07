@@ -257,12 +257,12 @@ export default function ProfilePage() {
       {/* ===== EDIT MODAL ===== */}
       <AnimatePresence>
         {isEditing && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-end sm:items-center z-50 p-4">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-[100] p-4 overflow-y-auto">
             <motion.div
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "100%", opacity: 0 }}
-              className="bg-white p-8 rounded-t-[2.5rem] sm:rounded-3xl w-full max-w-md relative shadow-2xl"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white p-6 md:p-8 rounded-3xl w-full max-w-md relative shadow-2xl my-auto mb-24 md:mb-auto"
             >
               <button
                 onClick={handleCancel}
@@ -347,7 +347,7 @@ export default function ProfilePage() {
                     </div>
                   </>
                 ) : (
-                  <div>
+                  <div className="pb-2">
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Skills</label>
                     <div className="relative">
                       <Sparkles className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400" />

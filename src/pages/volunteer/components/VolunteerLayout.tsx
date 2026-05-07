@@ -119,36 +119,19 @@ export default function VolunteerLayout() {
 
                 {/* Top Navigation */}
                 <nav className="flex-1 p-4 space-y-2">
-                    {topNavItems.map((item) => {
-                        const isDisabled = item.requiresDuty && !isOnDuty;
-                        
-                        if (isDisabled) {
-                            return (
-                                <div
-                                    key={item.to}
-                                    className="flex items-center gap-3 p-3 rounded-lg text-slate-600 opacity-50 cursor-not-allowed"
-                                    title="Duty must be ON to access this feature"
-                                >
-                                    <item.icon className="w-5 h-5" />
-                                    {item.label}
-                                </div>
-                            );
-                        }
-                        
-                        return (
-                            <NavLink
-                                key={item.to}
-                                to={item.to}
-                                end={item.to === '/volunteer'}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-3 p-3 rounded-lg transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`
-                                }
-                            >
-                                <item.icon className="w-5 h-5" />
-                                {item.label}
-                            </NavLink>
-                        );
-                    })}
+                    {topNavItems.map((item) => (
+                        <NavLink
+                            key={item.to}
+                            to={item.to}
+                            end={item.to === '/volunteer'}
+                            className={({ isActive }) =>
+                                `flex items-center gap-3 p-3 rounded-lg transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`
+                            }
+                        >
+                            <item.icon className="w-5 h-5" />
+                            {item.label}
+                        </NavLink>
+                    ))}
                 </nav>
 
                 {/* Bottom Navigation */}
@@ -189,25 +172,6 @@ export default function VolunteerLayout() {
                         <h2 className="text-lg font-semibold text-slate-700">Volunteer Dashboard</h2>
                     </div>
                     <div className="flex items-center gap-4">
-                        {/* Duty Toggle Button */}
-                        <button
-                            onClick={() => setIsOnDuty(!isOnDuty)}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium text-sm transition-colors ${
-                                isOnDuty 
-                                    ? 'bg-green-100 text-green-700 hover:bg-green-200' 
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                            }`}
-                        >
-                            <Power className={`w-4 h-4 ${isOnDuty ? 'text-green-600' : 'text-slate-500'}`} />
-                            {isOnDuty ? 'Duty ON' : 'Duty OFF'}
-                        </button>
-                        
-                        {/* Online Status */}
-                        <div className="flex items-center gap-2">
-                            <span className={`w-2 h-2 rounded-full ${isOnDuty ? 'bg-green-500' : 'bg-slate-400'}`}></span>
-                            <span className="text-sm text-slate-600">{isOnDuty ? 'Online' : 'Offline'}</span>
-                        </div>
-                        
                         {/* Profile Avatar */}
                         <button
                             onClick={() => navigate('/volunteer/profile')}
@@ -255,37 +219,20 @@ export default function VolunteerLayout() {
 
                         {/* Mobile Top Navigation */}
                         <nav className="flex-1 p-4 space-y-2">
-                            {topNavItems.map((item) => {
-                                const isDisabled = item.requiresDuty && !isOnDuty;
-                                
-                                if (isDisabled) {
-                                    return (
-                                        <div
-                                            key={item.to}
-                                            className="flex items-center gap-3 p-3 rounded-lg text-slate-600 opacity-50 cursor-not-allowed"
-                                            title="Duty must be ON to access this feature"
-                                        >
-                                            <item.icon className="w-5 h-5" />
-                                            {item.label}
-                                        </div>
-                                    );
-                                }
-                                
-                                return (
-                                    <NavLink
-                                        key={item.to}
-                                        to={item.to}
-                                        end={item.to === '/volunteer'}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className={({ isActive }) =>
-                                            `flex items-center gap-3 p-3 rounded-lg transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`
-                                        }
-                                    >
-                                        <item.icon className="w-5 h-5" />
-                                        {item.label}
-                                    </NavLink>
-                                );
-                            })}
+                            {topNavItems.map((item) => (
+                                <NavLink
+                                    key={item.to}
+                                    to={item.to}
+                                    end={item.to === '/volunteer'}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 p-3 rounded-lg transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`
+                                    }
+                                >
+                                    <item.icon className="w-5 h-5" />
+                                    {item.label}
+                                </NavLink>
+                            ))}
                         </nav>
 
                         {/* Mobile Bottom Navigation */}

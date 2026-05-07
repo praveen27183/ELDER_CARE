@@ -58,21 +58,21 @@ export default function ElderApp() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 p-4">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 mb-6">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-5xl font-bold text-gray-800">{t('appName')}</h1>
+        <div className="bg-white rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 mb-6">
+          <div className="flex justify-between items-center mb-6 md:mb-8">
+            <h1 className="text-3xl md:text-5xl font-bold text-gray-800">{t('appName')}</h1>
             <button
               onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-              className="p-4 bg-gray-100 rounded-2xl hover:bg-gray-200 transition-all"
+              className="p-3 md:p-4 bg-gray-100 rounded-xl md:rounded-2xl hover:bg-gray-200 transition-all"
             >
-              <Languages size={32} />
+              <Languages size={24} className="md:w-8 md:h-8" />
             </button>
           </div>
 
           {showLanguageMenu && (
-            <div className="mb-6 p-6 bg-blue-50 rounded-2xl">
-              <p className="text-2xl font-semibold mb-4 text-gray-700">{t('selectLanguage')}</p>
-              <div className="grid grid-cols-3 gap-4">
+            <div className="mb-6 p-4 md:p-6 bg-blue-50 rounded-2xl">
+              <p className="text-xl md:text-2xl font-semibold mb-4 text-gray-700">{t('selectLanguage')}</p>
+              <div className="grid grid-cols-3 gap-3 md:gap-4">
                 {(['en', 'ta', 'hi'] as Language[]).map((lang) => (
                   <button
                     key={lang}
@@ -80,7 +80,7 @@ export default function ElderApp() {
                       setLanguage(lang);
                       setShowLanguageMenu(false);
                     }}
-                    className={`py-4 px-6 rounded-xl text-2xl font-semibold transition-all ${language === lang
+                    className={`py-3 md:py-4 px-4 md:px-6 rounded-xl text-lg md:text-2xl font-semibold transition-all ${language === lang
                         ? 'bg-blue-600 text-white shadow-lg'
                         : 'bg-white text-gray-700 hover:bg-blue-100'
                       }`}
@@ -92,25 +92,25 @@ export default function ElderApp() {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-2 gap-4 md:gap-6 mb-6">
             {services.map(({ type, icon: Icon, color }) => (
               <button
                 key={type}
                 onClick={() => handleServiceClick(type)}
-                className={`${color} text-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200`}
+                className={`${color} text-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200`}
               >
-                <Icon size={64} className="mx-auto mb-4" strokeWidth={2.5} />
-                <p className="text-2xl font-bold">{t(type)}</p>
+                <Icon size={48} className="mx-auto mb-3 md:mb-4 md:w-16 md:h-16" strokeWidth={2.5} />
+                <p className="text-xl md:text-2xl font-bold">{t(type)}</p>
               </button>
             ))}
           </div>
 
           <button
             onClick={() => setShowMedicineReminder(true)}
-            className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-4"
+            className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-3 md:gap-4"
           >
-            <Bell size={48} strokeWidth={2.5} />
-            <span className="text-3xl font-bold">{t('medicineReminder')}</span>
+            <Bell size={32} className="md:w-12 md:h-12" strokeWidth={2.5} />
+            <span className="text-xl md:text-3xl font-bold">{t('medicineReminder')}</span>
           </button>
 
           <div className="mt-6 p-6 bg-yellow-50 rounded-2xl border-2 border-yellow-300">

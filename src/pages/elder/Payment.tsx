@@ -111,7 +111,7 @@ export default function Payment() {
     <div className="min-h-screen bg-slate-50 pb-24 font-sans">
 
       {/* HEADER */}
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-4 flex items-center gap-4">
+      <div className="sticky top-0 z-30 bg-white border-b border-slate-100 px-4 pt-6 pb-4 flex items-center gap-4">
         <motion.button 
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)} 
@@ -119,7 +119,7 @@ export default function Payment() {
         >
           <ArrowLeft className="w-6 h-6 text-slate-600" />
         </motion.button>
-        <h1 className="text-xl font-bold text-slate-800">{t.myWallet}</h1>
+        <h1 className="text-2xl font-black text-slate-800">{t.myWallet}</h1>
       </div>
 
       <div className="max-w-md mx-auto">
@@ -128,7 +128,7 @@ export default function Payment() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="m-4 bg-gradient-to-br from-emerald-500 to-teal-700 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden"
+          className="m-4 md:mx-0 bg-gradient-to-br from-emerald-500 to-teal-700 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden"
         >
           <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
           
@@ -194,9 +194,9 @@ export default function Payment() {
                   <div className="p-2 bg-purple-50 rounded-lg">
                     <QrCode className="w-5 h-5 text-purple-600" />
                   </div>
-                  <span className="font-bold text-slate-700">{t.scanToPay || "Scan QR to Pay"}</span>
+                  <span className="font-bold text-slate-700 text-sm md:text-base">{t.scanToPay || "Scan QR to Pay"}</span>
                 </div>
-                <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
+                <span className="text-[10px] md:text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
                   {showQR ? t.hide || "HIDE" : t.show || "SHOW"}
                 </span>
               </button>
@@ -225,8 +225,8 @@ export default function Payment() {
                   <div className="w-5 h-5 text-amber-600 font-bold flex items-center justify-center text-lg">₹</div>
                 </div>
                 <div>
-                  <span className="font-bold text-slate-700 block">{t.cashOnDelivery || "Cash on Delivery"}</span>
-                  <span className="text-xs text-slate-400">Pay volunteer after service</span>
+                  <span className="font-bold text-slate-700 text-sm md:text-base block">{t.cashOnDelivery || "Cash on Delivery"}</span>
+                  <span className="text-[10px] md:text-xs text-slate-400">Pay volunteer after service</span>
                 </div>
               </div>
               <div className="w-6 h-6 rounded-full border-2 border-emerald-500 flex items-center justify-center">
@@ -275,12 +275,12 @@ export default function Payment() {
       {/* MULTI-STEP ADD MONEY MODAL */}
       <AnimatePresence>
         {paymentStage !== 'idle' && (
-          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
             <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              className="bg-white rounded-t-[2.5rem] sm:rounded-3xl w-full max-w-sm p-8 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col justify-center"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-3xl w-full max-w-sm p-8 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col justify-center my-auto mb-24 md:mb-auto"
             >
               {paymentStage !== 'verifying' && paymentStage !== 'success' && (
                 <button 
@@ -442,12 +442,12 @@ export default function Payment() {
       {/* TRANSACTION SUCCESS TOAST/MODAL */}
       <AnimatePresence>
         {showSuccess && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-3xl w-full max-w-sm p-8 text-center shadow-2xl border-t-8 border-emerald-500"
+              className="bg-white rounded-3xl w-full max-w-sm p-8 text-center shadow-2xl border-t-8 border-emerald-500 mb-24 md:mb-auto"
             >
               <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle className="w-12 h-12 text-emerald-500" />

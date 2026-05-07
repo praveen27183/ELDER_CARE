@@ -24,14 +24,14 @@ export default function TransportPage() {
   return (
     <div className="min-h-screen bg-slate-50 p-6">
       <div className="max-w-md mx-auto">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-6 md:mb-8">
           <button 
             onClick={() => navigate(-1)}
-            className="p-3 bg-white rounded-2xl shadow-sm hover:bg-slate-50 transition-colors"
+            className="p-2 md:p-3 bg-white rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-50 transition-colors"
           >
             <ChevronLeft className="w-6 h-6 text-slate-600" />
           </button>
-          <h1 className="text-3xl font-black text-slate-800">
+          <h1 className="text-2xl md:text-3xl font-black text-slate-800">
             {t.ride}
           </h1>
         </div>
